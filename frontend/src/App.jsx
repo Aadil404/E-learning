@@ -1,11 +1,14 @@
+import React from 'react'
 import './App.css'
 import { Button } from './components/ui/button'
+import Login from './pages/login'
 
 function Home() {
   return(
-    <div>
-      <Button>Click Me</Button>
-    </div>
+    <main>
+      <Login />
+    </main>
+  
   )
 }
 
