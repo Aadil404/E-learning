@@ -1,0 +1,13 @@
+import './App.css'
+import { Button } from './components/ui/button'
+
+function Home() {
+  return(
+    <div>
+      <Button>Click Me</Button>
+    </div>
+  )
+}
+
+export default Home
+
