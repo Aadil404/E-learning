@@ -1,31 +1,34 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
-
+import { generateToken } from '../utils/generateToken.js';
 
 //user registration logic
 export const register = async (req, res) => {
+    // console.log("inside register function")
+
     try {
         const {name, email, password} = req.body;
         if(!name || !email ||  !password){
             return res.status(400).json({sucess: false, message: "please return all the fields"})
         }
         
-        const userExists = User.findOne({email})   //return single document(user) from collection
+        const userExists = await User.findOne({email})   //return single document(user) from collection
+        // console.log("userExists", userExists)
         if(userExists){
-            return res.status(400).json({sucess: false, message: "Emial already in use"})
+            return res.status(400).json({sucess: false, message: "Email already in use"})
         }
         
         //create a strong password from given password
         const hasedPassword = await bcrypt.hash(password, 12);
         
         //create a new user or create a document in the collection
-        await User.create({
+        const user = await User.create({
             name,
             email,
             password: hasedPassword
         })
 
-        return res.status(201).json({sucess: true, message: "User registered successfully"})
+        return res.status(201).json({sucess: true, message: "User registered successfully", user})
         
 
     } catch (error) {
@@ -36,6 +39,8 @@ export const register = async (req, res) => {
 
 //user login logic
 export const login = async (req, res) => {
+    // console.log("inside login function")
+
     try {
         const {email, password} = req.body;
         if(!email || !password){
@@ -52,7 +57,9 @@ export const login = async (req, res) => {
         if(!isPasswordCorrect){
             return res.status(400).json({sucess: false, message: "Invalid Password"})
         }
+        
 
+        //call the function to generate token and send it in the cookie of http response
         generateToken(user, res, `Welcome back ${user.name}`);
 
 
