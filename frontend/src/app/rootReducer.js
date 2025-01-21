@@ -1,7 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 import authReducer from "../features/authSlice";
-import { authApi } from "@/features/app/authApi";
+import { authApi } from "@/features/api/authApi";
 
 //combine all reducers and send it to store
 const rootReducer = combineReducers({

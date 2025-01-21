@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import {
   useRegisterUserMutation,
   useLoginUserMutation,
-} from "@/features/app/authApi";
+} from "@/features/api/authApi";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
