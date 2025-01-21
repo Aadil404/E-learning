@@ -44,7 +44,7 @@ export const login = async (req, res) => {
     try {
         const {email, password} = req.body;
         if(!email || !password){
-            res.status(400).json({sucess: false, message: "Please enter all the fields"})
+            return res.status(400).json({sucess: false, message: "Please enter all the fields"})
         }
 
         const user = await User.findOne({email}); //return single document(user) from collection
@@ -61,7 +61,7 @@ export const login = async (req, res) => {
 
         //call the function to generate token and send it in the cookie of http response
         generateToken(user, res, `Welcome back ${user.name}`);
-
+        
 
     } catch (error) {
         console.log("Error in user login", error);
