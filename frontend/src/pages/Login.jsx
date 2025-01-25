@@ -95,7 +95,7 @@ const Login = () => {
 
   return (
     //this is a builtin tabs component of shadcnUI and i customize it as required
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center mt-20">
       <Tabs defaultValue="login" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="login">Login</TabsTrigger>
