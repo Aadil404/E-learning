@@ -17,6 +17,8 @@ import {
 } from "@/features/api/authApi";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { use } from "react";
 
 const Login = () => {
   //for storing states of login and signup input
@@ -49,32 +51,38 @@ const Login = () => {
     },
   ] = useLoginUserMutation();
 
+  //navigate object for redirecting user to other pages
+  const navigate = useNavigate();
+
 
   //show response message in toast when user login or signup
   useEffect(() => {
-      if(registerIsSuccess && registerData){
-          toast.success(registerData.message || "signup successfull");
-      }
-      if(registerError){
-          toast.error(registerError.data.message || "signup failed");
-      }
-      if(loginIsSuccess && loginData){
-          toast.success(loginData.message || "login successfull");
-      }
-      if(loginError){
-          toast.error(loginError.data.message || "login failed");
-      }
+    if(registerIsSuccess){
+      toast.success(registerData.message || "signup successfull");
+      setLoginInput({email:signupInput.email,password:signupInput.password}); //after signup user will be logged in
+  }
+  }, [registerIsSuccess])
 
-  }, [
-    loginIsLoading,
-    registerIsLoading,
-    loginIsSuccess,
-    registerIsSuccess,
-    loginError,
-    registerError,
-    loginData,
-    registerData,
-  ]);
+  useEffect(() => {
+    if(registerError){
+        toast.error(registerError.data.message || "signup failed");
+    }
+  }, [registerError])
+
+  useEffect(() => {  
+    if(loginIsSuccess){
+        toast.success(loginData.message || "login successfull");
+        navigate("/"); //redirect user to home page after login
+    }
+  }, [loginIsSuccess])
+
+  useEffect(() => {
+    if(loginError){
+        toast.error(loginError.data.message || "login failed");
+    }
+  }, [loginError])
+
+
 
   //will handle input of data in login and signup cards and store them in state
   const changeInputHandler = (e, type) => {
@@ -86,7 +94,7 @@ const Login = () => {
   };
 
   //when user click submit button for login or signup this function will be called
-  const handleRegistration = async (type) => {
+  const handleRegistrationAndLogin = async (type) => {
     const inputData = type === "login" ? loginInput : signupInput;
     // console.log(inputData);
     const action = type === "login" ? loginUser : registerUser;
@@ -137,7 +145,7 @@ const Login = () => {
               <Button
                 disabled={loginIsLoading}
                 onClick={() => {
-                  handleRegistration("login");
+                  handleRegistrationAndLogin("login");
                 }}
               >
                 {loginIsLoading ? (
@@ -196,7 +204,7 @@ const Login = () => {
               <Button
                 disabled={registerIsLoading}
                 onClick={() => {
-                  handleRegistration("signup");
+                  handleRegistrationAndLogin("signup");
                 }}
               >
                 {registerIsLoading ? (
