@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Link } from "react-router-dom";
 
 const UserMenu = () => {
   return (
@@ -30,8 +31,8 @@ const UserMenu = () => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>My learning</DropdownMenuItem>
-          <DropdownMenuItem>Edit profile</DropdownMenuItem>
+          <DropdownMenuItem><Link to="my-learning">My Learning</Link></DropdownMenuItem>
+          <DropdownMenuItem><Link to="profile">Edit Profile</Link></DropdownMenuItem>
           <DropdownMenuItem>Log out</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

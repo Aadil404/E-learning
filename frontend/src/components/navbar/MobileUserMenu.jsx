@@ -12,6 +12,7 @@ import {
 
 import React from "react";
 import DarkMode from "./DarkMode";
+import { Link } from "react-router-dom";
 
 const MobileUserMenu = ({ user }) => {
   const role = "instrutor";
@@ -32,8 +33,8 @@ const MobileUserMenu = ({ user }) => {
 
         {user === true && (
           <div className="flex flex-col gap-y-4">
-            <div>My Learning</div>
-            <div>Edit profile</div>
+            <div><Link to='my-learning'>My Learning</Link></div>
+            <div><Link to='profile'>My Profile</Link></div>
             <div>Log out</div>
           </div>
         )}
