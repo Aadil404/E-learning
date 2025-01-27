@@ -13,7 +13,6 @@ export const authApi = createApi({
   }),
 
   endpoints: (builder) => ({
-
     //send user registration data to backend
     registerUser: builder.mutation({
       query: (inputData) => ({
@@ -34,17 +33,29 @@ export const authApi = createApi({
       //this function will be called when user login successfully
       async onQueryStarted({ dispatch, queryFulfilled }) {
         try {
-            const result = await queryFulfilled;
-            if(result)
-                dispatch(userLoggedIn({user:result.data.user}));   //calling userLoggedIn function from authSlice 
+          const result = await queryFulfilled;
+          if (result) dispatch(userLoggedIn({ user: result.data.user })); //calling userLoggedIn function from authSlice
         } catch (error) {
-            console.log("Error in loginUser, path:frontend/src/features/app/authApi.js", error);
+          console.log(
+            "Error in loginUser, path:frontend/src/features/app/authApi.js",
+            error
+          );
         }
-        
-      }
+      },
     }),
 
+    loadUser: builder.query({
+      query: () => ({
+        url: "profile",
+        method: "GET",
+      }),
+    })
   }),
 });
 
-export const { useRegisterUserMutation, useLoginUserMutation } = authApi;
+export const {
+  useRegisterUserMutation,
+  useLoginUserMutation,
+  useLoadUserQuery,
+  useLogoutUserQuery
+} = authApi;

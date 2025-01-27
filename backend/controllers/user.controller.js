@@ -68,3 +68,54 @@ export const login = async (req, res) => {
         return res.status(500).json({sucess: false, message: "Internal server error"})
     }
 }
+
+//user logout logic, delete the token from the cookie to logout
+export const logout = async (req, res) => {
+    try {
+        console.log("inside logout function")
+        return res
+            .status(200)
+            .cookie("token", "", {maxAge: 0})
+            .json({sucess: true, message: "Logout successfully"});
+    } catch (error) {
+        console.log("Error in logout", error);
+        return res.status(500).json({sucess: false, message: "Internal server error"})
+    }
+}
+
+//get user profile
+export const getUserProfile = async (req, res) => {
+    try {
+        const userId = req.id;
+        const user = await User.findById(userId).select("-password");   //select all the fields except password
+        
+        if(!user){
+            return res.status(404).json({sucess: false, message: "User not found"})
+        }
+
+        return res.status(200).json({sucess: true, message: "User profile fetched successfully", user})
+
+    } catch (error) {
+        console.log("Error in getting user profile", error);
+        return res.status(500).json({sucess: false, message: "Internal server error"})
+    }
+}
+
+export const updateUserProfile = async (req, res) => {
+    try {
+        const userId = req.id;
+        const {name} = req.body;
+        const profilePhoto = req.file;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({sucess: false, message: "User not found"})
+        }
+
+        
+    } catch (error) {
+        console.log("Error in updating user profile", error);
+        return res.status(500).json({sucess: false, message: "Internal server error"})
+    }
+}
+

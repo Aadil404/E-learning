@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     ],
     photoURL: {
         type: String,
-        default: ""
+        default: "https://cdn-icons-png.freepik.com/512/8742/8742495.png"
     }
 
 }, {timestamps: true});    //store the timestamps of the creation and updation of the document 

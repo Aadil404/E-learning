@@ -33,7 +33,7 @@ const UserMenu = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem><Link to="my-learning">My Learning</Link></DropdownMenuItem>
           <DropdownMenuItem><Link to="profile">Edit Profile</Link></DropdownMenuItem>
-          <DropdownMenuItem>Log out</DropdownMenuItem>
+          <DropdownMenuItem><Link to="logout">Log out</Link></DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Dashboard</DropdownMenuItem>
