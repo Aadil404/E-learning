@@ -1,6 +1,8 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/generateToken.js';
+import { deleteImageFromCloudinary, uploadMediaToCloudinary } from '../utils/cloudinary.js';
+import { deleteLocalMedia } from '../utils/multer.js';
 
 //user registration logic
 export const register = async (req, res) => {
@@ -101,6 +103,7 @@ export const getUserProfile = async (req, res) => {
     }
 }
 
+//update user profile
 export const updateUserProfile = async (req, res) => {
     try {
         const userId = req.id;
@@ -108,10 +111,29 @@ export const updateUserProfile = async (req, res) => {
         const profilePhoto = req.file;
 
         const user = await User.findById(userId);
+
         if(!user){
             return res.status(404).json({sucess: false, message: "User not found"})
+        } 
+
+        //delete old image from cloudinary
+        if(user.photoURL !== "https://res.cloudinary.com/dldk9rls3/image/upload/v1738085047/userIcon_bjbbzr.png"){  //this is the default image
+
+            const public_id = user.photoURL.split("/").pop().split(".")[0];
+            await deleteImageFromCloudinary(public_id);
         }
 
+        //upload new image to cloudinary
+        const result = await uploadMediaToCloudinary(profilePhoto.path);
+        const photoURL = result.secure_url;
+
+        const updatedData = {name, photoURL};
+        const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {new: true}).select("-password");
+        
+        //delete local media (uplaods folder) after we upload photo to cloudinary
+        deleteLocalMedia(profilePhoto.path);
+
+        return res.status(200).json({sucess: true, message: "User profile updated successfully", updatedUser})
         
     } catch (error) {
         console.log("Error in updating user profile", error);

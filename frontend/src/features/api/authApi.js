@@ -44,12 +44,23 @@ export const authApi = createApi({
       },
     }),
 
+    //retrive user profile data from backend
     loadUser: builder.query({
       query: () => ({
         url: "profile",
         method: "GET",
       }),
-    })
+    }),
+
+    
+    updateUser: builder.mutation({
+      query: (formData) => ({
+        url: "profile/update",
+        method: "PUT",
+        body: formData,
+      }),
+    }),
+
   }),
 });
 
@@ -57,5 +68,5 @@ export const {
   useRegisterUserMutation,
   useLoginUserMutation,
   useLoadUserQuery,
-  useLogoutUserQuery
+  useUpdateUserMutation,
 } = authApi;

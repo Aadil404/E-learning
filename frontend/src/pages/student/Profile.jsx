@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,18 +14,85 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import Course from "./Course";
-import { useLoadUserQuery } from "@/features/api/authApi";
+import {
+  useLoadUserQuery,
+  useUpdateUserMutation,
+} from "@/features/api/authApi";
+import { toast } from "sonner";
 
 const Profile = () => {
-  const {isLoading, data} = useLoadUserQuery();
-  
-  // if(!isLoading) console.log("hii i am from profile.jsx",data)
 
-  const user = data?.user;
+  //for getting user profile data when user hit /profile url
+  const {
+    isLoading: isLoading,
+    data: data,
+    refetch: refetch,
+  } = useLoadUserQuery();     
 
-  // const enrolledCourses = [1, 2];
-  return (
-    isLoading ? "Loadind..." :
+
+  //get user data
+  const user = data?.user || {};
+
+
+  //for updating user profile data when user click on Update profile button
+  const [
+    updateUser,
+    {
+      isLoading: isUpdating,
+      data: updatedData,
+      error: updateError,
+      isError: updateIsError,
+      isSuccess: updateIsSuccess,
+    },
+  ] = useUpdateUserMutation();     
+
+
+  //state variables for edit user form
+
+  const [name, setName] = React.useState("");
+  const [profilePhoto, setProfilePhoto] = React.useState("");
+
+
+  //for handling update from input
+  const onChangeHandler = (e) => {
+    const file = e.target.files?.[0];
+    if (file) setProfilePhoto(file);
+  };
+
+
+  //logic for save update buttoon
+  const updateUserHandler = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    if (!name || !profilePhoto) {
+      toast.error("Please provide both name and profile photo");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("profilePhoto", profilePhoto);
+
+    await updateUser(formData); //calling updateUser function from authApi
+  };
+
+
+  //for showing success and error messages
+  useEffect(() => {
+    if(updateIsSuccess){
+      refetch();
+      toast.success(updatedData?.message || "Profile updated successfully");
+    }
+    if(updateIsError){
+      toast.error(updateError?.message || "Failed to update profile");
+    }
+    
+  }, [updateIsSuccess, updateIsError]);
+
+
+  return isLoading ? (
+    "Loading..."
+  ) : (
     <div className="max-w-4xl mx-auto my-24 px-4">
       <h1 className="font-bold text-2xl text-center md:text-left">
         My Profile
@@ -72,11 +139,11 @@ const Profile = () => {
           {/* edit profile dialog box */}
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="w-[150px]">Edit Profile</Button>
+              <Button className="w-[150px]">Update Profile</Button>
             </DialogTrigger>
             <DialogContent className="">
               <DialogHeader>
-                <DialogTitle>Edit profile</DialogTitle>
+                <DialogTitle>Update Profile</DialogTitle>
                 <DialogDescription>
                   Make changes to your profile here. Click save when you're
                   done.
@@ -89,7 +156,10 @@ const Profile = () => {
                   </Label>
                   <Input
                     id="name"
-                    value="Pedro Duarte"
+                    placeholder="Name"
+                    
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="col-span-3"
                   />
                 </div>
@@ -100,14 +170,20 @@ const Profile = () => {
                   <Input
                     type="file"
                     accept="image/*"
-                    id="username"
+                    id="profilePhoto"
+                    onChange={onChangeHandler}
                     className="col-span-3"
                   />
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit" className="w-[150px]">
-                  {isLoading ? (
+                <Button
+                  disabled={isUpdating}
+                  onClick={updateUserHandler}
+                  type="submit"
+                  className="w-[150px]"
+                >
+                  {isUpdating ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Saving...
@@ -129,7 +205,9 @@ const Profile = () => {
           {user.enrolledCourses.length === 0 ? (
             <p>You haven't enrolled in any courses yet</p>
           ) : (
-            user.enrolledCourses.map((course) => <Course course={course} key={course._id} />)
+            user.enrolledCourses.map((course) => (
+              <Course course={course} key={course._id} />
+            ))
           )}
         </div>
       </div>

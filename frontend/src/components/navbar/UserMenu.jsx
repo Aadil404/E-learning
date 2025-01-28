@@ -32,7 +32,7 @@ const UserMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem><Link to="my-learning">My Learning</Link></DropdownMenuItem>
-          <DropdownMenuItem><Link to="profile">Edit Profile</Link></DropdownMenuItem>
+          <DropdownMenuItem><Link to="profile">My Profile</Link></DropdownMenuItem>
           <DropdownMenuItem><Link to="logout">Log out</Link></DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
