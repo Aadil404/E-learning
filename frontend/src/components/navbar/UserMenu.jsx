@@ -17,12 +17,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 
-const UserMenu = () => {
+const UserMenu = ({logoutHandler}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {/* user logo */}
-        <Avatar>
+        <Avatar className="cursor-pointer">
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
@@ -33,7 +33,7 @@ const UserMenu = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem><Link to="my-learning">My Learning</Link></DropdownMenuItem>
           <DropdownMenuItem><Link to="profile">My Profile</Link></DropdownMenuItem>
-          <DropdownMenuItem><Link to="logout">Log out</Link></DropdownMenuItem>
+          <DropdownMenuItem onClick={logoutHandler} className="cursor-pointer" >Log out</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Dashboard</DropdownMenuItem>

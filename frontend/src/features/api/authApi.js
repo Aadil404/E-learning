@@ -43,6 +43,14 @@ export const authApi = createApi({
         }
       },
     }),
+    
+    //hit backend logout api
+    logoutUser:builder.mutation({
+      query: () => ({
+        url: "logout",
+        method: "GET",
+      }),
+    }),
 
     //retrive user profile data from backend
     loadUser: builder.query({
@@ -67,6 +75,7 @@ export const authApi = createApi({
 export const {
   useRegisterUserMutation,
   useLoginUserMutation,
+  useLogoutUserMutation,
   useLoadUserQuery,
   useUpdateUserMutation,
 } = authApi;

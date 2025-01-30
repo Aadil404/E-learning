@@ -74,7 +74,6 @@ export const login = async (req, res) => {
 //user logout logic, delete the token from the cookie to logout
 export const logout = async (req, res) => {
     try {
-        console.log("inside logout function")
         return res
             .status(200)
             .cookie("token", "", {maxAge: 0})
