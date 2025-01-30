@@ -30,8 +30,8 @@ export const authApi = createApi({
         body: inputData,
       }),
 
-      //this function will be called when user login successfully
-      async onQueryStarted({ dispatch, queryFulfilled }) {
+      //this function will be called when user login successfully and store user data in state
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
           if (result) dispatch(userLoggedIn({ user: result.data.user })); //calling userLoggedIn function from authSlice
@@ -58,6 +58,18 @@ export const authApi = createApi({
         url: "profile",
         method: "GET",
       }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          if (result) dispatch(userLoggedIn({ user: result.data.user })); //calling userLoggedIn function from authSlice
+        } catch (error) {
+          console.log(
+            "Error in loadUser, path:frontend/src/features/app/authApi.js",
+            error
+          );
+        }
+      },
     }),
 
     

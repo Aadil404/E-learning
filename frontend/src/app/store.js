@@ -9,3 +9,10 @@ export const appStore = configureStore({
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware),
 
 })
+
+//refreshing reinitialize the redux store, to make sure user info is always available while logged-in initializeApp will reftech user info by calling loadUser every time the app is reloaded and the store it in the state using userLoggedIn
+const initializeApp = async () => {
+    await appStore.dispatch(authApi.endpoints.loadUser.initiate({}, {forceRefetch: true}));
+}
+
+initializeApp();
