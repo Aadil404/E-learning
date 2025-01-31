@@ -7,9 +7,12 @@ import MobileUserMenu from "./MobileUserMenu";
 import { useLogoutUserMutation } from "@/features/api/authApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const user = true;
+
+  //get user info from store
+  const {user} = useSelector(store=>store.auth);
 
   //logout logic
   const [logoutUser, {data, isSuccess}] = useLogoutUserMutation();
@@ -40,7 +43,7 @@ const Navbar = () => {
       {/* for big screen */}
       <div className="hidden md:flex items-center gap-5 pr-[5%]">
         {user ? (
-          <UserMenu logoutHandler={logoutHandler}/>
+          <UserMenu user={user} logoutHandler={logoutHandler}/>
         ) : (
           <div className="flex items-center gap-2">
             <Button variant="outline"> Login</Button>

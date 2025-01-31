@@ -15,7 +15,6 @@ import DarkMode from "./DarkMode";
 import { Link } from "react-router-dom";
 
 const MobileUserMenu = ({ user, logoutHandler }) => {
- 
 
   const role = "instrutor";
   return (
@@ -33,7 +32,7 @@ const MobileUserMenu = ({ user, logoutHandler }) => {
           <DarkMode />
         </SheetHeader>
 
-        {user === true && (
+        {user !== null && (
           <div className="flex flex-col gap-y-4">
             <div><Link to='my-learning'>My Learning</Link></div>
             <div><Link to='profile'>My Profile</Link></div>
@@ -41,7 +40,7 @@ const MobileUserMenu = ({ user, logoutHandler }) => {
           </div>
         )}
 
-        {user === false && (
+        {user === null && (
           <div className="flex flex-col gap-y-4">
             <Button variant="outline"> Login</Button>
             <Button>Signup</Button>
