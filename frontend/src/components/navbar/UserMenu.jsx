@@ -17,8 +17,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 
-const UserMenu = ({logoutHandler, user}) => {
-  
+const UserMenu = ({logoutHandler, user, role}) => {
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,8 +36,13 @@ const UserMenu = ({logoutHandler, user}) => {
           <DropdownMenuItem><Link to="profile">My Profile</Link></DropdownMenuItem>
           <DropdownMenuItem onClick={logoutHandler} className="cursor-pointer" >Log out</DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Dashboard</DropdownMenuItem>
+        {
+          user?.role === "instructor" &&<>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Dashboard</DropdownMenuItem>
+          </>
+          
+        }
       </DropdownMenuContent>
     </DropdownMenu>
   );

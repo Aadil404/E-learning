@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
-
   //get user info from store
   const {user} = useSelector(store=>store.auth);
 
@@ -33,7 +32,7 @@ const Navbar = () => {
     <div className="flex items-center justify-between h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
 
       {/* e-leraning logo */}
-      <div className="flex items-center gap-2 pl-[5%]">
+      <div className="flex items-center gap-2 pl-[5%] cursor-pointer" onClick={() => navigate("/")}>
         <Layers3Icon size={35} />
         <h1 className="font-extrabold text-2xl">E-Learning</h1>
       </div>
@@ -46,8 +45,8 @@ const Navbar = () => {
           <UserMenu user={user} logoutHandler={logoutHandler}/>
         ) : (
           <div className="flex items-center gap-2">
-            <Button variant="outline"> Login</Button>
-            <Button>Signup</Button>
+            <Button variant="outline" onClick={() => navigate("/login")}> Login</Button>
+            <Button onClick={() => navigate("/login")}>Signup</Button>
           </div>
         )}
 

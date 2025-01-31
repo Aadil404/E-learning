@@ -47,6 +47,12 @@ const Profile = () => {
   ] = useUpdateUserMutation();     
 
 
+  //refetch user data whenever profile component re-render
+  useEffect(()=>{
+    refetch();
+  },[])
+
+
   //state variables for edit user form
 
   const [name, setName] = React.useState("");

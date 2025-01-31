@@ -12,11 +12,10 @@ import {
 
 import React from "react";
 import DarkMode from "./DarkMode";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const MobileUserMenu = ({ user, logoutHandler }) => {
-
-  const role = "instrutor";
+  const navigate = useNavigate();
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -42,12 +41,12 @@ const MobileUserMenu = ({ user, logoutHandler }) => {
 
         {user === null && (
           <div className="flex flex-col gap-y-4">
-            <Button variant="outline"> Login</Button>
-            <Button>Signup</Button>
+            <Button variant="outline" onClick={() => navigate("/login")}> Login</Button>
+            <Button onClick={() => navigate("/login")}>Signup</Button>
           </div>
         )}
 
-        {role === "instrutor" && user && (
+        {user?.role === "instructor" && user && (
           <div className="pt-5">
             <Button className="w-full">Dashboard</Button>
           </div>

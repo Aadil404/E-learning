@@ -1,7 +1,7 @@
 //authApi.js contains api for login and register using RTK query
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { userLoggedIn } from "@/features/authSlice";
+import { userLoggedIn, userLoggedOut } from "@/features/authSlice";
 
 const baseUrl = "http://localhost:8080/api/user/";
 
@@ -50,6 +50,18 @@ export const authApi = createApi({
         url: "logout",
         method: "GET",
       }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          if (result) dispatch(userLoggedOut()); //calling userLoggedOut function from authSlice
+        } catch (error) {
+          console.log(
+            "Error in logoutUser, path:frontend/src/features/app/authApi.js",
+            error
+          );
+        }
+      },
     }),
 
     //retrive user profile data from backend
