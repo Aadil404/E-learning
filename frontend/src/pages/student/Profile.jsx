@@ -27,6 +27,7 @@ const Profile = () => {
     isLoading: isLoading,
     data: data,
     refetch: refetch,
+    isFetching: isFetching,
   } = useLoadUserQuery();     
 
 
@@ -96,7 +97,7 @@ const Profile = () => {
   }, [updateIsSuccess, updateIsError]);
 
 
-  return isLoading ? (
+  return (isLoading || isFetching) ? (
     "Loading..."
   ) : (
     <div className="max-w-4xl mx-auto my-24 px-4">
@@ -137,7 +138,7 @@ const Profile = () => {
             <p className="font-semibold text-gray-900 dark:text-gray-100 ">
               Role:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                {user.role.toUpperCase()}
+                {user.role?.toUpperCase()}
               </span>
             </p>
           </div>
@@ -208,10 +209,10 @@ const Profile = () => {
       <div className="my-5">
         <h1 className="font-bold text-xl">Courses you have enrolled in.</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 my-5">
-          {user.enrolledCourses.length === 0 ? (
+          {user.enrolledCourses?.length === 0 ? (
             <p>You haven't enrolled in any courses yet</p>
           ) : (
-            user.enrolledCourses.map((course) => (
+            user.enrolledCourses?.map((course) => (
               <Course course={course} key={course._id} />
             ))
           )}
