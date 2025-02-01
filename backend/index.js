@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./database/connectDB.js"; //also give extension of file
 import userRoutes from "./routes/user.route.js";
+import courseRoutes from "./routes/course.route.js"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -26,7 +27,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 //apis
-app.use("/api/user", userRoutes); //call userRoutes when user hit /api/user route
+app.use("/api/user", userRoutes);     //call userRoutes when user hit /api/user route
+app.use("/api/course", courseRoutes);     //call courseRoutes when user hit /api/course route
 
 app.listen(PORT, () => {
   console.log(`server listen at port ${PORT}`);
