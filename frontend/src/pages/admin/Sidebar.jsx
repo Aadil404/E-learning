@@ -4,13 +4,13 @@ import { Link, Outlet } from "react-router-dom";
 const Sidebar = () => {
   return (
     <div className="flex">
-      <div className="hidden sm:block w-[250px] space-y-8 border-r border-gray-300 dark:border-gray-700  p-5 sticky top-0  h-screen">
+      <div className="hidden sm:block w-[250px] space-y-8 border-r border-gray-300 dark:border-gray-700 bg-gray-100  p-5 sticky top-0  h-screen">
         <div className="mt-20 space-y-4">
-          <Link to="/admin/dashboard" className="flex items-center gap-2">
+          <Link to="dashboard" className="flex items-center gap-2">
             <ChartColumn square={22} />
             <h1>Dashboard</h1>
           </Link>
-          <Link to="/admin/course" className="flex items-center gap-2">
+          <Link to="course" className="flex items-center gap-2">
             <SquareLibrary size={22} />
             <h1>Courses</h1>
           </Link>
