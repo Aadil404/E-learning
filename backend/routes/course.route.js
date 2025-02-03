@@ -1,10 +1,10 @@
 import express from 'express';
 import isAuthenticated from '../middlewares/isAuthenticated.js';
-import { createCourse } from '../controllers/course.controller.js';
+import { createCourse, getCreatorCourse } from '../controllers/course.controller.js';
 
 const router = express.Router();
 
 router.route("/create").post(isAuthenticated, createCourse);
-
+router.route("").get(isAuthenticated, getCreatorCourse)
 
 export default router

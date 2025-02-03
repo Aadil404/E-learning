@@ -27,6 +27,7 @@ const AddCourse = () => {
 
   const createCourseHandler = async () => {
     await createCourse({ title, category });
+    navigate("/admin/course");
   };
 
   //toast message 
