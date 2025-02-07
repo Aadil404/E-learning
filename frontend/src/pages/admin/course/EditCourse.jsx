@@ -4,7 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import CourseTab from "./CourseTab";
 
 const EditCourse = () => {
-  const { courseId } = useParams();
   return (
     <div className="flex-1">
       <div className="flex items-center justify-between">
