@@ -18,7 +18,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEditCourseMutation } from "@/features/api/courseApi";
+import {
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+} from "@/features/api/courseApi";
 import { Loader, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -26,7 +29,8 @@ import { toast } from "sonner";
 
 const CourseTab = () => {
   const isPublished = true;
-
+  const params = useParams();
+  const courseId = params.courseId;
   const navigate = useNavigate();
 
   const [input, setInput] = useState({
@@ -58,9 +62,8 @@ const CourseTab = () => {
     }
   };
 
-  const [editCourse, { isLoading, isError, isSuccess, error, data }] = useEditCourseMutation();
-  const params = useParams();
-  const courseId = params.courseId
+  const [editCourse, { isLoading, isError, isSuccess, error, data }] =
+    useEditCourseMutation();
 
   const updateCourseHandler = async () => {
     const formData = new FormData();
@@ -72,21 +75,52 @@ const CourseTab = () => {
     formData.append("courseLevel", input.courseLevel);
     formData.append("coursePrice", input.coursePrice);
     formData.append("courseThumbnail", input.courseThumbnail);
-    
-    await editCourse({formData, courseId});
+
+    await editCourse({ formData, courseId });
   };
 
   useEffect(() => {
-    if(isSuccess){
-        toast.success(data?.message || "Course edited successfully");
+    if (isSuccess) {
+      navigate(-1);
+      toast.success(data?.message || "Course edited successfully");
     }
-    if(isError){
-        toast.error(error?.data?.message || "Something went wrong");
+    if (isError) {
+      toast.error(error?.data?.message || "Something went wrong");
     }
-  }, [isSuccess, isError])
-  
+  }, [isSuccess, isError]);
 
-  return (
+  const {
+    isLoading: courseIsLoading,
+    data: courseData,
+    isSuccess: courseIsSuccess,
+    isError: courseIsError,
+    error: courseError,
+    refetch,
+    isFetching: courseIsFetching,
+  } = useGetCourseByIdQuery(courseId);
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
+    if (courseIsSuccess && !courseIsFetching) {
+      setInput({
+        courseTitle: courseData?.course?.title,
+        subTitle: courseData?.course?.subTitle,
+        description: courseData?.course?.description,
+        coursePrice: courseData?.course?.price,
+        category: courseData?.course?.category,
+        courseLevel: courseData?.course?.level,
+      });
+
+      setpreviewThumbnail(courseData?.course?.thumbnail);
+    }
+  }, [courseIsSuccess, courseIsFetching]);
+
+  return (courseIsLoading || courseIsFetching) ? (
+    <Loader2 className="animate-spin" />
+  ) : (
     <Card>
       <CardHeader className="flex flex-row justify-between">
         <div>
@@ -135,6 +169,7 @@ const CourseTab = () => {
             <div>
               <Label>Category</Label>
               <Select
+                value={input.category || courseData?.course?.category}
                 onValueChange={(e) => setInput({ ...input, category: e })}
               >
                 <SelectTrigger className="w-[180px]">
@@ -162,6 +197,7 @@ const CourseTab = () => {
             <div>
               <Label>Course Level</Label>
               <Select
+                value={input.courseLevel || courseData?.course?.level}
                 onValueChange={(e) => setInput({ ...input, courseLevel: e })}
               >
                 <SelectTrigger className="w-[180px]">
