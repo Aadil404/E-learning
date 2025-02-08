@@ -8,7 +8,7 @@ const EditCourse = () => {
     <div className="flex-1">
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-2xl">Add details about your course</h1>
-        <Link>
+        <Link to='lecture'>
           <Button variant="link" className="hover:text-blue-600">
             Go to Lectures Page
           </Button>

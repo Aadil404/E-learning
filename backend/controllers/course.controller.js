@@ -1,4 +1,5 @@
 import Course from "../models/course.model.js";
+import Lecture from "../models/lecture.model.js";
 import {
   deleteImageFromCloudinary,
   uploadMediaToCloudinary,
@@ -132,5 +133,35 @@ export const getCourseById = async (req, res) => {
       return res.status(500).json({sucess: false, message: "Internal server error"})
   }
 
+}
+
+//create lecture for a course
+export const createLecture = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    console.log(req.body);
+    const {lectureTitle} = req.body;
+
+    if(!lectureTitle){
+        return res.status(400).json({sucess: false, message: "Lecture title is required"})
+    }
+
+    let course = await Course.findById(courseId);
+    if(!course){
+        return res.status(404).json({sucess: false, message: "Course not found"})
+    }
+
+    const createLecture = await Lecture.create({ lectureTitle })
+
+    course.lectures.push(createLecture._id);
+    await course.save();
+
+    return res.status(201).json({sucess: true, message: "Lecture created successfully", createLecture})
+
+
+  } catch (error) {
+    console.log("Error in creating lecture", error);
+    return res.status(500).json({sucess: false, message: "Internal server error"})
+  }
 }
 
