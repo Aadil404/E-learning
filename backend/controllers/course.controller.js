@@ -164,3 +164,20 @@ export const createLecture = async (req, res) => {
   }
 }
 
+//get all lectures beloong to a course
+export const getCourseLectures = async (req, res) => {
+  try {
+    const {courseId} = req.params;
+    const course = await Course.findById(courseId).populate("lectures");
+
+    if(!course){
+        return res.status(404).json({sucess: false, message: "course not found"})
+    }
+
+    return res.status(200).json({sucess: true, message: "All lectures fetched successfully", lectures: course.lectures})
+  } catch (error) {
+    console.log("Error in getting all lectures", error);
+    return res.status(500).json({sucess: false, message: "Internal server error"})
+  }
+}
+
