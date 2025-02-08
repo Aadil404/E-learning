@@ -17,7 +17,6 @@ const CreateLecture = () => {
     const [createLecture, {isLoading, data, isSuccess, error, isError}] = useCreateLectureMutation();
 
     const createLectureHandler = async () => {
-      // console.log(lectureTitle, courseId);
         await createLecture({lectureTitle, courseId});
     };
 

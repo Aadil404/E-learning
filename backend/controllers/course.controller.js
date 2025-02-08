@@ -139,7 +139,6 @@ export const getCourseById = async (req, res) => {
 export const createLecture = async (req, res) => {
   try {
     const { courseId } = req.params;
-    console.log(req.body);
     const {lectureTitle} = req.body;
 
     if(!lectureTitle){
