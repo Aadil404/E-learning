@@ -277,3 +277,41 @@ export const getLectureById = async (req, res) => {
       .json({ sucess: false, message: "Internal server error" });
   }
 };
+
+
+export const removeLecture = async (req, res) => {
+  try {
+    
+    const { lectureId } = req.params;
+    const lecture = await Lecture.findByIdAndDelete(lectureId);
+    if (!lecture) {
+      return res
+        .status(404)
+        .json({ sucess: false, message: "Lecture not found" });
+    }
+
+    //delete video from cloudinary
+    if (lecture.publicId) {
+      const publicId = lecture.publicId;
+      await deleteVideoFromCloudinary(publicId);
+    }
+
+    //delete lecture from course
+    const course = await Course.findOne({ lectures: lectureId });
+    if (course) {
+      course.lectures.pull(lectureId);
+      await course.save();
+    }
+
+    return res
+      .status(200)
+      .json({ sucess: true, message: "Lecture deleted successfully" });
+    
+
+  } catch (error) {
+    console.log("Error in deleting lecture", error);
+    return res
+      .status(500)
+      .json({ sucess: false, message: "Internal server error" });
+  }
+}

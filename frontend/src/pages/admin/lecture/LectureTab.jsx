@@ -13,10 +13,12 @@ import { Switch } from "@/components/ui/switch";
 import {
   useEditLectureMutation,
   useGetLectureByIdQuery,
+  useRemoveLectureMutation,
 } from "@/features/api/courseApi";
 import axios from "axios";
 import { Loader, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { use } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -33,7 +35,6 @@ const LectureTab = () => {
   const [mediaProgress, setMediaProgress] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [btnDisabled, setBtnDisabled] = useState(false);
-
 
   // upload video file handler
   const fileChangeHandler = async (e) => {
@@ -81,18 +82,16 @@ const LectureTab = () => {
     if (lectureIsSuccess && lectureData) {
       setTitle(lectureData.lecture.lectureTitle);
       setUploadVideoInfo({
-        videoUrl: lectureData.lecture.videoUrl
+        videoUrl: lectureData.lecture.videoUrl,
       });
       setIsFree(lectureData.lecture.isPreviewFree);
     }
   }, [lectureIsSuccess]);
 
-  
-
   const [editLecture, { isLoading, isError, isSuccess, error, data }] =
     useEditLectureMutation();
 
-    // save lecture handler
+  // save lecture handler
   const saveLectureHandler = async () => {
     await editLecture({
       courseId,
@@ -113,6 +112,32 @@ const LectureTab = () => {
     }
   }, [isSuccess, isError]);
 
+  const [
+    removeLecture,
+    {
+      isLoading: removeLectureIsLoading,
+      isError: removeLectureIsError,
+      isSuccess: removeLectureIsSuccess,
+      error: removeLectureError,
+      data: removeLectureData,
+    },
+  ] = useRemoveLectureMutation();
+
+  const removeLectureHandler = async () => {
+    await removeLecture({ lectureId });
+  };
+
+  useEffect(() => {
+    if (removeLectureIsSuccess) {
+      toast.success(
+        removeLectureData?.message || "Lecture removed successfully"
+      );
+      refetch();
+      navigate(-1);
+    } else if (removeLectureIsError) {
+      toast.error(removeLectureError?.data?.message || "Something went wrong");
+    }
+  }, [removeLectureIsSuccess, removeLectureIsError]);
 
   return lectureIsLoading || lectureIsFetching ? (
     <Loader2 className="animate-spin" />
@@ -126,7 +151,12 @@ const LectureTab = () => {
           </CardDescription>
         </div>
         <div className="space-x-2">
-          <Button className="bg-red-600 hover:bg-red-700">
+          <Button
+            className="bg-red-600 hover:bg-red-700"
+            onClick={removeLectureHandler}
+            disabled={removeLectureIsLoading}
+          >
+            {removeLectureIsLoading && <Loader className="animate-spin" />}
             Remove Lecture
           </Button>
         </div>
@@ -147,9 +177,7 @@ const LectureTab = () => {
           </div>
 
           <div>
-            <Label>
-              Upload Video
-            </Label>
+            <Label>Upload Video</Label>
             <Input
               type="file"
               onChange={fileChangeHandler}
@@ -158,14 +186,12 @@ const LectureTab = () => {
             />
           </div>
 
-
           {mediaProgress && (
             <div className="my-4">
               <Progress value={uploadProgress} className="w-full" />
               <p>{uploadProgress}%</p>
             </div>
           )}
-
 
           {/* display video if uploaded */}
           {uploadVideoInfo && uploadVideoInfo.videoUrl && (
@@ -178,7 +204,12 @@ const LectureTab = () => {
 
           <div className="flex items-center space-x-2">
             <Label>Free Preview</Label>
-            <Switch checked={isFree} onCheckedChange={() => {setIsFree(!isFree)}} />
+            <Switch
+              checked={isFree}
+              onCheckedChange={() => {
+                setIsFree(!isFree);
+              }}
+            />
           </div>
           <div className="flex gap-4">
             <Button variant="outline" onClick={() => navigate(-1)}>
