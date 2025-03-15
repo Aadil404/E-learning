@@ -8,7 +8,7 @@ export const courseApi = createApi({
         baseUrl: COURSE_URL,
         credentials: "include",
     }),
-    tagTypes: ["Course"],  // Define the tag type
+    tagTypes: ["Course", "Lecture"],  // Define the tag type
 
     endpoints: (builder) => ({
         createCourse: builder.mutation({
@@ -56,10 +56,27 @@ export const courseApi = createApi({
             query: (courseId) => ({
                 url: `${courseId}/lecture`,
                 method: "GET",
+            }),
+            providesTags: ["Lecture"]
+        }),
+
+        editLecture: builder.mutation({
+            query: ({courseId, lectureId, lectureTitle, videoInfo, isPreviewFree}) => ({
+                url: `${courseId}/lecture/${lectureId}`,
+                method: "PUT",
+                body: {lectureTitle, videoInfo, isPreviewFree},
+            }),
+            invalidatesTags: ["Lecture"]
+        }),
+
+        getLectureById: builder.query({
+            query: (lectureId) => ({
+                url: `lecture/${lectureId}`,
+                method: "GET",
             })
         })
     })
 })
 
 
-export const {useCreateCourseMutation, useGetCourseQuery, useEditCourseMutation, useGetCourseByIdQuery, useCreateLectureMutation, useGetCourseLecturesQuery} = courseApi;
+export const {useCreateCourseMutation, useGetCourseQuery, useEditCourseMutation, useGetCourseByIdQuery, useCreateLectureMutation, useGetCourseLecturesQuery, useEditLectureMutation, useGetLectureByIdQuery} = courseApi;
