@@ -43,7 +43,11 @@ const CourseTable = () => {
               <TableCell className="font-medium">
                 {course?.price || "NA"}
               </TableCell>
-              <TableCell><Badge>{course.isPublished ? "Published" : "Draft"}</Badge></TableCell>
+              <TableCell>
+                <Badge className={course.isPublished ? "bg-green-500" : ""}>
+                  {course.isPublished ? "Published" : "Draft"}
+                </Badge>
+              </TableCell>
               <TableCell className="text-right">
                 <Button variant='outline' onClick={() => navigate(`${course._id}`)}>
                   <Edit />

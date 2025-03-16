@@ -82,9 +82,17 @@ export const courseApi = createApi({
                 url: `lecture/${lectureId}`,
                 method: "GET",
             })
-        })
+        }),
+
+        publishOrUnpublishCourse: builder.mutation({
+            query: ({courseId, publish}) => ({
+                url: `${courseId}?publish=${publish}`,
+                method: "PUT",
+            }),
+            invalidatesTags: ["Course"]
+        }),
     })
 })
 
 
-export const {useCreateCourseMutation, useGetCourseQuery, useEditCourseMutation, useGetCourseByIdQuery, useCreateLectureMutation, useGetCourseLecturesQuery, useEditLectureMutation, useGetLectureByIdQuery, useRemoveLectureMutation} = courseApi;
+export const {useCreateCourseMutation, useGetCourseQuery, useEditCourseMutation, useGetCourseByIdQuery, useCreateLectureMutation, useGetCourseLecturesQuery, useEditLectureMutation, useGetLectureByIdQuery, useRemoveLectureMutation, usePublishOrUnpublishCourseMutation} = courseApi;

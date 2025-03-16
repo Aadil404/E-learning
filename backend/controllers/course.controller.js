@@ -315,3 +315,33 @@ export const removeLecture = async (req, res) => {
       .json({ sucess: false, message: "Internal server error" });
   }
 }
+
+
+//publish and unpublish course
+export const togglePublishCourse = async (req, res) => {
+  try {
+    
+    const {courseId} = req.params;
+    const {publish} = req.query;           //true or false
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res
+        .status(404)
+        .json({ sucess: false, message: "Course not found" });
+    }
+
+    course.isPublished = publish === "true";
+    await course.save();
+    const statusMessage = course.isPublished ? "published" : "unpublished";
+
+    return res
+      .status(200)
+      .json({ sucess: true, message: `Course ${statusMessage} successfully` });
+
+  } catch (error) {
+    console.log("Error in publishing/unpublishing course", error);
+    return res
+      .status(500)
+      .json({ sucess: false, message: "Internal server error" });
+  }
+}

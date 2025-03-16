@@ -21,14 +21,15 @@ import {
 import {
   useEditCourseMutation,
   useGetCourseByIdQuery,
+  usePublishOrUnpublishCourseMutation,
 } from "@/features/api/courseApi";
 import { Loader, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { use } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const CourseTab = () => {
-  const isPublished = true;
   const params = useParams();
   const courseId = params.courseId;
   const navigate = useNavigate();
@@ -118,7 +119,24 @@ const CourseTab = () => {
     }
   }, [courseIsSuccess, courseIsFetching]);
 
-  return (courseIsLoading || courseIsFetching) ? (
+
+  const [publishOrUnpublishCourse, { isLoading: publishOrUnpublishCourseIsLoading, isError: publishOrUnpublishCourseIsError, error: publishOrUnpublishCourseError, data: publishOrUnpublishCourseData, isSuccess: publishOrUnpublishCourseIsSuccess }] = usePublishOrUnpublishCourseMutation();
+
+  const publishOrUnpublishCourseHandler = async () => {
+    await publishOrUnpublishCourse({ courseId, publish: !courseData?.course.isPublished });
+  };
+
+  useEffect(() => {
+    if (publishOrUnpublishCourseIsSuccess) {
+      refetch();
+      toast.success(publishOrUnpublishCourseData?.message || "Course updated successfully");
+    }
+    if (publishOrUnpublishCourseIsError) {
+      toast.error(publishOrUnpublishCourseError?.data?.message || "Something went wrong");
+    }
+  }, [publishOrUnpublishCourseIsSuccess, publishOrUnpublishCourseIsError]);
+
+  return (courseIsLoading) ? (
     <Loader2 className="animate-spin" />
   ) : (
     <Card>
@@ -130,8 +148,8 @@ const CourseTab = () => {
           </CardDescription>
         </div>
         <div className="space-x-2">
-          <Button variant="outline">
-            {isPublished ? "Unpublish" : "Publish"}
+          <Button variant="outline" onClick={() => publishOrUnpublishCourseHandler()}>
+            {publishOrUnpublishCourseIsLoading ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : courseData?.course.isPublished ? "Unpublish" : "Publish"}
           </Button>
           <Button>Remove Course</Button>
         </div>
