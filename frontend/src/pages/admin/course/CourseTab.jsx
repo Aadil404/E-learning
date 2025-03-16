@@ -22,6 +22,7 @@ import {
   useEditCourseMutation,
   useGetCourseByIdQuery,
   usePublishOrUnpublishCourseMutation,
+  useRemoveCourseMutation,
 } from "@/features/api/courseApi";
 import { Loader, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -48,7 +49,7 @@ const CourseTab = () => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  const [previewThumbnail, setpreviewThumbnail] = useState();
+  const [previewThumbnail, setpreviewThumbnail] = useState("");
 
   //get file
   const getThumbnail = (e) => {
@@ -136,6 +137,23 @@ const CourseTab = () => {
     }
   }, [publishOrUnpublishCourseIsSuccess, publishOrUnpublishCourseIsError]);
 
+
+  const [removeCourse, { isLoading: removeCourseIsLoading, isError: removeCourseIsError, error: removeCourseError, data: removeCourseData, isSuccess: removeCourseIsSuccess }] = useRemoveCourseMutation();
+
+  const removeCourseHandler = async () => {
+    await removeCourse({ courseId });
+  };
+
+  useEffect(() => {
+    if (removeCourseIsSuccess) {
+      toast.success(removeCourseData?.message || "Course removed successfully");
+      navigate(-1);
+    }
+    if (removeCourseIsError) {
+      toast.error(removeCourseError?.data?.message || "Something went wrong");
+    }
+  }, [removeCourseIsSuccess, removeCourseIsError]);
+
   return (courseIsLoading) ? (
     <Loader2 className="animate-spin" />
   ) : (
@@ -148,10 +166,12 @@ const CourseTab = () => {
           </CardDescription>
         </div>
         <div className="space-x-2">
-          <Button variant="outline" onClick={() => publishOrUnpublishCourseHandler()}>
-            {publishOrUnpublishCourseIsLoading ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : courseData?.course.isPublished ? "Unpublish" : "Publish"}
+          <Button variant="outline" onClick={() => publishOrUnpublishCourseHandler()} disabled={publishOrUnpublishCourseIsLoading}>
+            {publishOrUnpublishCourseIsLoading ? <div><Loader2 className="mr-1 h-4 w-4 animate-spin" />...wait</div> : courseData?.course.isPublished ? "Unpublish" : "Publish"}
           </Button>
-          <Button>Remove Course</Button>
+          <Button onClick={() => removeCourseHandler()} disabled={removeCourseIsLoading}>
+            {removeCourseIsLoading ? <div><Loader2 className="mr-1 h-4 w-4 animate-spin" />...wait</div> : "Remove Course"}
+          </Button>
         </div>
       </CardHeader>
       <CardContent>

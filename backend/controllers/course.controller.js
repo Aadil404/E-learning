@@ -345,3 +345,39 @@ export const togglePublishCourse = async (req, res) => {
       .json({ sucess: false, message: "Internal server error" });
   }
 }
+
+
+export const removeCourse = async (req, res) => {
+  try {
+    
+    const {courseId} = req.params;
+    const course = await Course.findByIdAndDelete(courseId);
+    if (!course) {
+      return res
+        .status(404)
+        .json({ sucess: false, message: "Course not found" });
+    }
+
+    //delete all lectures of this course
+    for (let lectureId of course.lectures) {
+      const lecture = await Lecture.findByIdAndDelete(lectureId);
+      if (lecture) {
+        //delete video from cloudinary
+        if (lecture.publicId) {
+          const publicId = lecture.publicId;
+          await deleteVideoFromCloudinary(publicId);
+        }
+      }
+    }
+
+    return res
+      .status(200)
+      .json({ sucess: true, message: "Course removed successfully" });
+
+  } catch (error) {
+    console.log("Error in removing course", error);
+    return res
+      .status(500)
+      .json({ sucess: false, message: "Internal server error" });
+  }
+}
