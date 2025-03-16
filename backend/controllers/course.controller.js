@@ -205,6 +205,32 @@ export const getCourseLectures = async (req, res) => {
   }
 };
 
+export const getPublishedCourse = async (req, res) => {
+  try {
+   
+    const courses = await Course.find({ isPublished: true }).populate({
+      path: "createdBy",
+      select: "name photoURL"
+    });
+
+    if (!courses) {
+      return res
+        .status(404)
+        .json({ sucess: false, message: "Courses not found" });
+    }
+  
+    return res
+      .status(200)
+      .json({ sucess: true, message: "Published courses fetched successfully", courses });
+
+  } catch (error) {
+    console.log("Error in getting published courses", error);
+    return res
+      .status(500)
+      .json({ sucess: false, message: "Internal server error" });
+  }
+}
+
 export const editLecture = async (req, res) => {
   try {
     const { lectureTitle, videoInfo, isPreviewFree } = req.body;
