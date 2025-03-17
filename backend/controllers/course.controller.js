@@ -139,6 +139,33 @@ export const getCourseById = async (req, res) => {
   }
 };
 
+export const getPublishedCourseById = async (req, res) => {
+  try {
+    
+    const { courseId } = req.params;
+    const course = await Course.findById(courseId)
+      .populate("lectures")
+      .populate("createdBy", "-password")
+      
+
+    if (!course) {
+      return res
+        .status(404)
+        .json({ sucess: false, message: "Course not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ sucess: true, message: "Course fetched successfully", course });
+
+  } catch (error) {
+    console.log("Error in getting published course by id", error);
+    return res
+      .status(500)
+      .json({ sucess: false, message: "Internal server error" });
+  }
+}
+
 //create lecture for a course
 export const createLecture = async (req, res) => {
   try {
