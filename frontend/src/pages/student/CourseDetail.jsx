@@ -99,11 +99,11 @@ const CourseDetail = () => {
                 <ReactPlayer
                   width="100%"
                   height={"100%"}
-                  url={courseData?.course.lectures[0].videoUrl}
-                  controls={courseData?.course.lectures[0].isPreviewFree}
+                  url={courseData?.course.lectures[0]?.videoUrl}
+                  controls={courseData?.course.lectures[0]?.isPreviewFree}
                 />
               </div>
-              <b>{courseData?.course.lectures[0].lectureTitle}</b>
+              <b>{courseData?.course.lectures[0]?.lectureTitle}</b>
               <Separator className="my-2" />
               <h1 className="text-lg md:text-xl ">
                 Course Price: <b>₹{courseData?.course.price}</b>
