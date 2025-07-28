@@ -114,7 +114,7 @@ const CourseDetail = () => {
               {false ? (
                 <Button className="w-full">Continue Learning</Button>
               ) : (
-                <PurchaseCourseButton />
+                <PurchaseCourseButton courseId={courseId} />
               )}
             </CardFooter>
           </Card>
