@@ -12,22 +12,24 @@ import {
 } from "@/features/api/courseApi";
 import { BadgeInfo, Loader2, Lock, PlayCircle } from "lucide-react";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 import ReactPlayer from "react-player";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import PurchaseCourseButton from "@/components/PurchaseCourseButton";
+import { useGetCourseDetailWithStatusQuery } from "@/features/api/purchaseApi";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
+  const navigate = useNavigate();
   const {
     isLoading,
     data: courseData,
     isSuccess,
     isError,
     error,
-  } = useGetPublishedCourseByIdQuery(courseId);
+  } = useGetCourseDetailWithStatusQuery(courseId);
 
   if (isError)
     return (
@@ -111,8 +113,8 @@ const CourseDetail = () => {
             </CardContent>
 
             <CardFooter className="flex justify-center p-4">
-              {false ? (
-                <Button className="w-full">Continue Learning</Button>
+              {courseData?.purchased ? (
+                <Button className="w-full" onClick={() => {navigate(`/course-progress/${courseId}`)}}>Continue Learning</Button>
               ) : (
                 <PurchaseCourseButton courseId={courseId} />
               )}
