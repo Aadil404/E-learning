@@ -5,6 +5,7 @@ import userRoutes from "./routes/user.route.js";
 import courseRoutes from "./routes/course.route.js"
 import mediaRoutes from "./routes/media.route.js"
 import coursePurchaseRoutes from "./routes/coursePurchase.route.js";
+import courseProgressRoutes from "./routes/courseProgress.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -33,6 +34,7 @@ app.use("/api/media", mediaRoutes);
 app.use("/api/user", userRoutes);     //call userRoutes when user hit /api/user route
 app.use("/api/course", courseRoutes);     //call courseRoutes when user hit /api/course route
 app.use("/api/purchase", coursePurchaseRoutes); //call coursePurchaseRoutes when user hit /api/purchase route
+app.use("/api/progress", courseProgressRoutes); //call courseProgressRoutes when user hit /api/progress route
 
 app.listen(PORT, () => { 
   console.log(`server listen at port ${PORT}`);
