@@ -434,3 +434,52 @@ export const removeCourse = async (req, res) => {
       .json({ sucess: false, message: "Internal server error" });
   }
 }
+
+
+export const searchCourse = async (req,res) => {
+
+  
+  
+    try {
+        const {query = "", categories = [], sortByPrice =""} = req.query;
+
+        
+        // create search query
+        const searchCriteria = {
+            isPublished:true,
+            $or:[
+                {title: {$regex:query, $options:"i"}},
+                {subTitle: {$regex:query, $options:"i"}},
+                {category: {$regex:query, $options:"i"}},
+            ]
+        }
+
+        // if categories selected
+        if(categories.length > 0) {
+            searchCriteria.category = {$in: categories};
+        }
+
+        // define sorting order
+        const sortOptions = {};
+        if(sortByPrice === "low"){
+            sortOptions.price = 1;//sort by price in ascending
+        }else if(sortByPrice === "high"){
+            sortOptions.price = -1; // descending
+        }
+
+        let courses = await Course.find(searchCriteria).populate({path:"createdBy", select:"name photoURL"}).sort(sortOptions);
+
+        return res.status(200).json({
+            success:true,
+            courses: courses || []
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Internal server error"
+        });
+        
+    }
+}
