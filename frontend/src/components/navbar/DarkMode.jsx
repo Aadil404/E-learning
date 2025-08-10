@@ -8,8 +8,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import React from 'react'
+import { useTheme } from "../ThemeProvider"
+
 
 const DarkMode = () => {
+  const { theme, setTheme } = useTheme()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -31,7 +31,7 @@ const HeroSection = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search for courses"
-            className="flex-grow border-none focus-visible:ring-0 px-6 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
+            className="flex-grow border-none focus-visible:ring-0 px-6 py-2 text-gray-900 dark:text-gray-100 dark:bg-gray-800 placeholder-gray-400 dark:placeholder-gray-500"
           />
           <Button
             type="submit"

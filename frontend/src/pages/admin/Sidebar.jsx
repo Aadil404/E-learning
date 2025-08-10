@@ -4,7 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 const Sidebar = () => {
   return (
     <div className="flex">
-      <div className="hidden sm:block w-[250px] space-y-8 border-r border-gray-300 dark:border-gray-700 bg-gray-100  p-5 sticky top-0  h-screen">
+      <div className="hidden sm:block w-[250px] space-y-8 border-r border-gray-300 dark:border-gray-700 dark:bg-gray-900 bg-gray-100  p-5 sticky top-0  h-screen">
         <div className="mt-20 space-y-4">
           <Link to="dashboard" className="flex items-center gap-2">
             <ChartColumn square={22} />
@@ -17,7 +17,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="flex-1 p-14 md:p-20 bg-white">
+      <div className="flex-1 p-14 md:p-20 bg-white dark:bg-gray-900">
           <Outlet />
         </div>
     </div>

@@ -22,6 +22,7 @@ import CourseProgress from "./pages/student/CourseProgress";
 import SearchPage from "./pages/student/SearchPage";
 import { AdminRoute, AuthenticatedUser, ProtectedRoute } from "./components/ProtectedRoutes";
 import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 //routers for dynamic routing between pages
 const appRouter = createBrowserRouter([
@@ -105,7 +106,10 @@ const appRouter = createBrowserRouter([
 function Home() {
   return (
     <main>
-      <RouterProvider router={appRouter} />
+      <ThemeProvider>
+        <RouterProvider router={appRouter} />
+      </ThemeProvider>
+      
     </main>
   );
 }
