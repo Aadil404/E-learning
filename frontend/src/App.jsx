@@ -20,6 +20,8 @@ import EditLecture from "./pages/admin/lecture/EditLecture";
 import CourseDetail from "./pages/student/CourseDetail";
 import CourseProgress from "./pages/student/CourseProgress";
 import SearchPage from "./pages/student/SearchPage";
+import { AdminRoute, AuthenticatedUser, ProtectedRoute } from "./components/ProtectedRoutes";
+import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute";
 
 //routers for dynamic routing between pages
 const appRouter = createBrowserRouter([
@@ -38,29 +40,29 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
+        element: <AuthenticatedUser><Login /></AuthenticatedUser>,
       },
       {
         path: "my-learning",
-        element: <MyLearning />,
+        element: <ProtectedRoute><MyLearning /></ProtectedRoute>,
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: <ProtectedRoute><Profile /></ProtectedRoute>,
       },
 
       {
-        path:"course-detail/:courseId",
+        path: "course-detail/:courseId",
         element: <CourseDetail />,
       },
 
       {
-        path:"course-progress/:courseId",
-        element: <CourseProgress />,
+        path: "course-progress/:courseId",
+        element: <ProtectedRoute><PurchaseCourseProtectedRoute><CourseProgress /></PurchaseCourseProtectedRoute></ProtectedRoute>,
       },
 
       {
-        path:"course/search",
+        path: "course/search",
         element: <SearchPage />,
       },
 
@@ -68,7 +70,7 @@ const appRouter = createBrowserRouter([
 
       {
         path: "admin",
-        element: <Sidebar />,
+        element: <AdminRoute><Sidebar /></AdminRoute>,
         children: [
           {
             path: "dashboard",
@@ -76,11 +78,11 @@ const appRouter = createBrowserRouter([
           },
           {
             path: "course",
-            element: <CourseTable/>
+            element: <CourseTable />
           },
           {
             path: "course/create",
-            element: <AddCourse/>
+            element: <AddCourse />
           },
           {
             path: "course/:courseId",
