@@ -39,7 +39,7 @@ const UserMenu = ({logoutHandler, user, role}) => {
         {
           user?.role === "instructor" &&<>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link to="/">Dashboard</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link to="/admin/dashboard">Dashboard</Link></DropdownMenuItem>
           </>
           
         }
