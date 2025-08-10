@@ -19,6 +19,7 @@ import CreateLecture from "./pages/admin/lecture/CreateLecture";
 import EditLecture from "./pages/admin/lecture/EditLecture";
 import CourseDetail from "./pages/student/CourseDetail";
 import CourseProgress from "./pages/student/CourseProgress";
+import SearchPage from "./pages/student/SearchPage";
 
 //routers for dynamic routing between pages
 const appRouter = createBrowserRouter([
@@ -56,6 +57,11 @@ const appRouter = createBrowserRouter([
       {
         path:"course-progress/:courseId",
         element: <CourseProgress />,
+      },
+
+      {
+        path:"course/search",
+        element: <SearchPage />,
       },
 
       //Instructor apis start from here
